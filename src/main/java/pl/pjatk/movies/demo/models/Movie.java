@@ -1,18 +1,26 @@
 package pl.pjatk.movies.demo.models;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "movies")
 public class Movie {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private Integer id;
     private String title;
-    private MovieCategory MovieCategory;
+    @Column(name = "category")
+    private String movieCategory;
 
     public Movie() {
     }
 
-    public Movie(Integer id, String title, MovieCategory MovieCategory) {
+    public Movie(Integer id, String title, String movieCategory) {
         this.id = id;
         this.title = title;
-        this.MovieCategory = MovieCategory;
+        this.movieCategory = movieCategory;
     }
 
     public Movie(String title) {
@@ -24,7 +32,7 @@ public class Movie {
         return "Movie{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", MovieCategory=" + MovieCategory +
+                ", MovieCategory=" + movieCategory +
                 '}';
     }
 
@@ -36,8 +44,8 @@ public class Movie {
         return title;
     }
 
-    public MovieCategory getCategory() {
-        return MovieCategory;
+    public String getCategory() {
+        return movieCategory;
     }
 
     public void setId(Integer id) {
@@ -48,7 +56,7 @@ public class Movie {
         this.title = title;
     }
 
-    public void setCategory(MovieCategory MovieCategory) {
-        this.MovieCategory = MovieCategory;
+    public void setCategory(String MovieCategory) {
+        this.movieCategory = MovieCategory;
     }
 }

@@ -2,9 +2,8 @@ package pl.pjatk.movies.demo.services;
 
 import org.springframework.stereotype.Service;
 import pl.pjatk.movies.demo.models.Movie;
-import pl.pjatk.movies.demo.models.MovieCategory;
+import pl.pjatk.movies.demo.repositories.IMovieRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,43 +11,38 @@ import java.util.Optional;
 public class MovieService {
 
     private List<Movie> list;
+    private final IMovieRepository movieRepository;
 
-    public MovieService() {
-        list = new ArrayList<Movie>();
-        list.add(new Movie(1, "Twoje uszy", MovieCategory.HORROR));
-        list.add(new Movie(2, "Twoje oczy", MovieCategory.ROMANCE));
-        list.add(new Movie(3, "Twoje nogi", MovieCategory.DRAMA));
-        list.add(new Movie(4, "Twoje noże", MovieCategory.ACTION));
-        list.add(new Movie(5, "Twoje libido", MovieCategory.SCIFI));
+    public MovieService(IMovieRepository movieRepository) {
+        this.movieRepository = movieRepository;
     }
 
 
     public List<Movie> getAllMovies() {
-        return list;
+        return movieRepository.findAll();
     }
 
     public Movie getMovieById(Integer id) {
-        return list.stream()
-                .filter(x -> x.getId().equals(id))
-                .findAny()
+        return movieRepository.findById(id)
                 .orElse(null);
     }
 
     public Movie addNewMovie(String title) {
-        return new Movie(title);
+        return movieRepository.save(new Movie(title));
     }
 
     public Movie updateMovie(Integer id, String title) {
-        Movie movieById = getMovieById(id);
-        if (movieById != null) {
-            movieById.setTitle(title);
+        Optional<Movie> movieById = movieRepository.findById(id);
+        if (movieById.isPresent()) {
+            movieById.get().setTitle(title);
+            return movieRepository.save(movieById.get());
         }
-        return movieById;
+        else
+            return movieRepository.save(movieById.get());
     }
-    public void deleteById(Integer id){
+
+    public void deleteById(Integer id) {
         Movie movieById = getMovieById(id);
-        if (getMovieById(id) != null) {
-            list.remove(movieById);
-        }
+        movieRepository.delete(movieById);
     }
 }

@@ -41,14 +41,14 @@ public class MovieRestController {
 
     @PostMapping("/{id}{title}")
     public ResponseEntity<Movie> updateMovie(@PathVariable Integer id, String title) {
-        if(movieService.updateMovie(id, title) == null)
+        if (movieService.updateMovie(id, title) == null)
             return ResponseEntity.badRequest().build();
         return ResponseEntity.ok(movieService.getMovieById(id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable Integer id){
-        if(movieService.getMovieById(id) == null)
+    public ResponseEntity<Void> deleteById(@PathVariable Integer id) {
+        if (movieService.getMovieById(id) == null)
             return ResponseEntity.badRequest().build();
         return ResponseEntity.accepted().build();
     }
